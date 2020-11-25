@@ -13,7 +13,7 @@ int FIRST = BLUE; // assign this to the first element of the enum above.
 int LAST = GREEN; // assign this to the last element of the enum above.
 int *keys[num_btn] = { // assign the keyboard keys to each buttons
   new int[2]{1, 'a'},
-  new int[3]{2, ' ', 'w'},
+  new int[3]{2, ' ', 's'},
   new int[2]{1, 'd'}
 };
 
@@ -70,17 +70,19 @@ void loop() {
           for(int j=1;j<_k[0]+1;j++)
           {
             Keyboard.press(_k[j]);
+            analogWrite(current_led, brightness_active);
           }
         }
         else { // btn_read == OFF
           for(int j=1;j<_k[0]+1;j++)
           {
             Keyboard.release(_k[j]);
+            analogWrite(current_led, brightness_dim);
           }          
         }
         break;
     }
   }
   //(btn_stat == LOW) ? analogWrite(led_pin_begin+i, brightness_active) : analogWrite(led_pin_begin+i, brightness_dim);
-  delay(1);
+  delayMicroseconds(300);
 }

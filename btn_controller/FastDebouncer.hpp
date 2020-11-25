@@ -18,11 +18,14 @@ class FastDebouncer
     int last;
 
   public:
+    // Feed value(=init_value) should be 0 or 1 (one-bit debouncing)
+    // counter_length is related to debouncing period => # of values needed for debouncing.
     FastDebouncer(int init_value, int counter_length)
     {
-      // state history assignment
+      // state history is filled with the initial init_value.
       (init_value == HIGH) ? history = 0xFFFFFFFF : history = 0;
 
+      // set the mask with the amount of counter_length
       mask = 0;
       for (int i = 0; i < counter_length; i++)
       {
@@ -49,11 +52,11 @@ class FastDebouncer
       bool last_bit_different = (history & 1) != (new_value & 1);
       bool report = false;
 
-
       if (
-        // history is stabilized, and new value is incoming -> immediately raise a trigger event.
+        // history is stabilized, and new value, which is different from history, is incoming 
+        // -> immediately raise a trigger event.
         (stabilized && last_bit_different)
-        // when stabilized, last value should be same to the new value.
+        // when stabilized, last sent value should be same to the new value.
         // Otherwise, a button state is changed again within the debouncing period.
         // raise a trigger here also.
         || (stabilized && last != new_value)
